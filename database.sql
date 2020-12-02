@@ -1,5 +1,13 @@
+-- phpMyAdmin SQL Dump
+-- version 5.0.2
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Creato il: Dic 02, 2020 alle 10:00
+-- Versione del server: 10.4.14-MariaDB
+-- Versione PHP: 7.3.22
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -16,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `short_links`
+-- Struttura della tabella `short_links`
 --
 
 CREATE TABLE `short_links` (
@@ -28,34 +36,31 @@ CREATE TABLE `short_links` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `short_links`
+-- Dump dei dati per la tabella `short_links`
 --
 
 INSERT INTO `short_links` (`id`, `code`, `url`, `count`, `timestamp`) VALUES
-(1, 'POCar7p', 'https://www.heytuts.com/', 0, 1538979802),
-(2, 'cxGZkVl', 'http://google.com', 0, 1544640223),
-(3, 'a4pf8ZR', 'https://lesn.me/', 0, 1548333926),
-(4, 'Yp9iCGH', 'https://www.youtube.com', 0, 1548333946),;
+(1, '28sSVr1', 'http://local.truebitcoin.biz/criptomonete-hi-tech', 0, 1606327755);
 
 --
--- Indexes for dumped tables
+-- Indici per le tabelle scaricate
 --
 
 --
--- Indexes for table `short_links`
+-- Indici per le tabelle `short_links`
 --
 ALTER TABLE `short_links`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT per le tabelle scaricate
 --
 
 --
--- AUTO_INCREMENT for table `short_links`
+-- AUTO_INCREMENT per la tabella `short_links`
 --
 ALTER TABLE `short_links`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
