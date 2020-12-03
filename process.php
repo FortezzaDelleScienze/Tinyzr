@@ -13,30 +13,50 @@
 		if ( validate_url($url) == true ){
 			
 			// create a connection to the database
+			
 			$conn = mysqli_connect(DB_SERVER, DB_USER, DB_PASS, DB_NAME);
-			
-			// create all the variables to save in the database
-			$id = '';
-			$code = generate_code();
-			$timestamp = time();
-			$count = 0;
-			
-			$result = mysqli_query($conn, "INSERT INTO short_links VALUES ('$id', '$code', '$url', '$count', '$timestamp')");
-			
-			// verify that the new record was created
-			$query = mysqli_query($conn, "SELECT * FROM short_links WHERE timestamp='$timestamp' AND code='$code'");
-			if ($data = mysqli_fetch_assoc($query)){
-				/* SUCCESS POINT */
-				
-				echo URL_BASE . $code;
+			if ($conn->connect_error) {
+				die("Connection failed: " . $conn->connect_error);
 			}
-			else
-				echo 'Unable to shorten your url';
+				
+			$numUrl=check_double_url($url,$conn);
+
+			if($numUrl > 0){
+				
+				mysqli_close($conn);
+				echo 'url già esistente - url non inserito';
+			}
+			else{
+				$code = generate_code($conn);
+				if($code=="esiste"){
+					echo 'esiste';
+				}
+				else{
+					$count = 0;
+					$sql="INSERT INTO `shortlinks`(`code`, `url`, `counting`) VALUES ('$code','$url','$count')";
+					$a=$conn->query($sql);
+					$sql2="SELECT * FROM `shortlinks` where code='$code'";
+					if ($result = mysqli_query($conn, $sql2)) {
+						while ($row = mysqli_fetch_assoc($result)) {
+							$count++;
+						}
+						echo URL_BASE . $code;
+						echo $count;
+
+					}
+					else{
+						echo 'no data';
+					};
+				}
+				mysqli_close($conn);
+			}
 		}
-		else
-			echo 'Please enter a valid url';
+		else{
+			echo 'Inserisci un url valido';
+		}
 	}
-	else
-		echo 'No url was found';
+	else{
+		echo 'Nessun url trovato';
+	}
 	
 ?>

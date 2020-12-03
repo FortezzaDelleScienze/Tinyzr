@@ -51,28 +51,32 @@
 					
 					// get the url to be shortened
 					var url = $("#url").val();
-					
+					var result="0";
 					if ($.trim(url) != ''){
 						
 						// submit all of the required data via post to the processing script
 						$.post("./process.php", {url:url}, function(data){
-							
+							console.log(data);
 							// process the returned data from the post
-							if (data.substring(0, 7) == 'http://' || data.substring(0, 8) == 'https://'){
-								$("#url").val(data).focus();
+							if (data == '1'){
+								$("#url").val(url).focus();
 								
 								// display a success message to the user
 								$("#message").html('Your link has been shortened!');
+								var counter = $("#counter").text();
+								
+								
+								$("#counter").text(parseInt(counter) + 1);
 								
 								
 								// update the counter shown on the page
-								var counter = $("#counter").text();
-								$("#counter").text(parseInt(counter) + 1);
+								
 							}
-							else
+							else{
 								$("#message").html(data);
+							}
 							
-						});
+						})
 						
 					}
 					
@@ -108,9 +112,9 @@
 				</table></form>
 				
 				<h3 id="message" class="success"><?php echo ( isset($message) ? $message : '' );  ?></h3>
-				
+				<?php $conn = mysqli_connect(DB_SERVER, DB_USER, DB_PASS, DB_NAME);?>
 				<div class="meta">
-					Ci sono attualmente <b id="counter"><?php echo number_format(count_urls()); ?></b> url in Tinyzr .
+					Ci sono attualmente <b id="counter"><?php echo number_format(count_urls('',$conn)); ?></b> url in Tinyzr .
 				</div>
 				
 			</div>
