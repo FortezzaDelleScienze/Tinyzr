@@ -1,40 +1,60 @@
 <?php
 	
 	// require the include files that has all the backend functionality
+	session_start();
+
 	require_once('./include.php');
+	$uri=($_SERVER['REQUEST_URI']);
+	$arrCode=explode('?',$uri);
+	$code="";
 	
+	if(is_array($arrCode) && count($arrCode) >1 && !empty($arrCode)){
+		$code=$arrCode[1];
+	}
+
 	// check to see if a code has been supplied and process it
-	if (isset($_GET['code']) && $_GET['code'] != '' && strlen($_GET['code']) > 0){
+	if ($code!=""){
 		
 		
-		$code = $_GET['code']; 
+		
 		
 		// validate the code against the database
 		$conn = mysqli_connect(DB_SERVER, DB_USER, DB_PASS, DB_NAME);
-		$query = mysqli_query($conn, "SELECT * FROM short_links WHERE code='$code'");
-		if (mysqli_num_rows($query) == 1){
+		$query = "SELECT * FROM shortlinks WHERE code='$code'";
+		$count=0;
+		$urlTo="";
+		if ($result = mysqli_query($conn, $query)) {
+			while ($row = mysqli_fetch_assoc($result)) {
+				$urlTo=$row["url"];
+				$count++;
+			}
 			
+			
+			if($count===1){
+					
 			// retrieve the data from the database
-			$data = mysqli_fetch_assoc($query);
 			
-			// update the coutner in the database
-			mysqli_query($conn, "UPDATE short_links SET count='" . ($data['count']) + 1 . "' WHERE id='". ($data['id'])."'");
-			
-			/* ADD EXTRA STUFF HERE IF DESIRED */
 			
 			// set some header data and redirect the user to the url
 			header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 			header("Cache-Control: no-cache");
 			header("Pragma: no-cache");
 
-			header("Location: " . $data['url']);
+			header("Location: " . $urlTo);
 			
 			die();
+			}
 		}
 		else
 			$message = '<font color="red">Non riesco a reindirizzare al tuo url</font>';
 	}
-	
+	$username="";
+	if(isset($_SESSION["username"])){
+		$class="enabled";
+	}
+	else{
+		$class="disabled";
+	}
 ?>
 <html>
 	<head>
@@ -45,7 +65,8 @@
 		<script>
 			// ready the sites javascript for use after the page has loaded
 			$(document).ready(function(){
-				
+				<?php if ($class=="enabled") 
+				{?>
 				// process the form submission using javascript
 				$("#lesnForm").submit(function(event){
 					
@@ -87,7 +108,19 @@
 					// prevent the form from reloading the page
 					return false;
 				});
-				
+				<?php
+				}
+				else{
+				?>	
+				jQuery(document).on("click","#lesnBtn",function(event){
+					event.preventDefault();
+					$("#message").html("EFFETTUA IL LOGIN PER CONTINUARE");
+					return false;
+				})
+				<?php
+				}
+				?>
+
 				// select the text box on page load
 				$("#url").focus();
 			});
@@ -107,7 +140,7 @@
 				<table class="mainForm"><form method="post" action="#" name="lesnForm" id="lesnForm">
 					<tr>
 						<td align="right"><input style="width: 100%;" type="text" name="url" id="url" value="" placeholder="http://" /></td>
-						<td align="left" width="1"><input type="submit" name="lesnBtn" value="tinyzr me" /></td>
+						<td align="left" width="1"><input type="submit" id="lesnBtn" name="lesnBtn" value="tinyzr me" /></td>
 					</tr>
 				</table></form>
 				

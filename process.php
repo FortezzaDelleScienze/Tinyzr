@@ -19,6 +19,8 @@
 				die("Connection failed: " . $conn->connect_error);
 			}
 				
+				
+			
 			$numUrl=check_double_url($url,$conn);
 
 			if($numUrl > 0){
@@ -32,21 +34,19 @@
 					echo 'esiste';
 				}
 				else{
-					$count = 0;
-					$sql="INSERT INTO `shortlinks`(`code`, `url`, `counting`) VALUES ('$code','$url','$count')";
-					$a=$conn->query($sql);
-					$sql2="SELECT * FROM `shortlinks` where code='$code'";
-					if ($result = mysqli_query($conn, $sql2)) {
-						while ($row = mysqli_fetch_assoc($result)) {
-							$count++;
-						}
-						echo URL_BASE . $code;
-						echo $count;
-
+				$count = 0;
+				$sql="INSERT INTO `shortlinks`(`code`, `url`, `counting`) VALUES ('$code','$url','$count')";
+				$a=$conn->query($sql);
+				$sql2="SELECT * FROM `shortlinks` where code='$code'";
+				if ($result = mysqli_query($conn, $sql2)) {
+					while ($row = mysqli_fetch_assoc($result)) {
+						$count++;
 					}
-					else{
-						echo 'no data';
-					};
+					echo $count;
+				}
+				else{
+				echo 'no data';
+				};
 				}
 				mysqli_close($conn);
 			}
