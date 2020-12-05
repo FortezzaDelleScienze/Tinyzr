@@ -34,7 +34,6 @@
 		else
 			$message = '<font color="red">Non riesco a reindirizzare al tuo url</font>';
 	}
-	
 ?>
 <html>
 	<head>
